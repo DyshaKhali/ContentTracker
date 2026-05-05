@@ -1,0 +1,212 @@
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.app-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 0 0, rgba(209, 73, 91, 0.08), transparent 30rem),
+    linear-gradient(135deg, rgba(35, 87, 137, 0.08), rgba(244, 246, 243, 0) 38rem),
+    #f4f6f3;
+}
+
+.topbar {
+  border-bottom: 1px solid rgba(20, 28, 38, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+.toolbar {
+  min-height: 72px;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand-mark {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: #235789;
+  border-radius: 8px;
+}
+
+.main-content {
+  padding-top: 28px;
+  padding-bottom: 48px;
+}
+
+.control-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 8px 0 20px;
+}
+
+.filters {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.status-select {
+  min-width: 210px;
+}
+
+.notice {
+  margin-bottom: 18px;
+}
+
+.stats-row {
+  margin-bottom: 22px;
+}
+
+.stat-block {
+  min-height: 104px;
+  padding: 18px;
+  border: 1px solid rgba(20, 28, 38, 0.08);
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 8px;
+}
+
+.content-card {
+  height: 100%;
+}
+
+.content-card .MuiCardActionArea-root {
+  height: 100%;
+}
+
+.content-card .MuiCardContent-root {
+  min-height: 230px;
+  display: flex;
+  flex-direction: column;
+}
+
+.poster-token {
+  width: 62px;
+  height: 82px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.poster-anime {
+  background: linear-gradient(150deg, #235789, #69a297);
+}
+
+.poster-movie {
+  background: linear-gradient(150deg, #d1495b, #edae49);
+}
+
+.poster-series {
+  background: linear-gradient(150deg, #2f4858, #6f7d8c);
+}
+
+.card-title {
+  margin-top: 18px;
+  overflow-wrap: anywhere;
+}
+
+.card-meta {
+  margin-top: 12px;
+}
+
+.progress-area {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.progress-area .MuiLinearProgress-root {
+  height: 8px;
+  margin-top: 8px;
+  border-radius: 4px;
+}
+
+.center-state,
+.empty-state {
+  min-height: 320px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.empty-state {
+  align-content: center;
+  gap: 10px;
+  color: rgba(20, 28, 38, 0.78);
+}
+
+.empty-icon {
+  font-size: 54px;
+  color: #235789;
+}
+
+.details-drawer {
+  position: relative;
+  width: min(460px, 100vw);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 22px;
+}
+
+.season-row {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(20, 28, 38, 0.1);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.drawer-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.drawer-status {
+  position: absolute;
+  top: 24px;
+  right: 70px;
+}
+
+@media (max-width: 780px) {
+  .toolbar {
+    align-items: flex-start;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .control-band {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .filters {
+    width: 100%;
+  }
+
+  .status-select {
+    min-width: 100%;
+  }
+
+  .drawer-status {
+    position: static;
+    align-self: flex-start;
+  }
+}

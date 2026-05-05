@@ -1,0 +1,59 @@
+﻿# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Build output
+build/
+dist/
+frontend/dist/
+
+# Environment files
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+backend/server.out.log
+backend/server.err.log
+frontend/vite.out.log
+frontend/vite.err.log
+
+# Go build/test artifacts
+*.exe
+*.test
+*.out
+coverage.out
+backend/content-tracker
+backend/content-tracker.exe
+backend/server
+backend/server.exe
+
+# Vite / frontend cache
+.vite/
+frontend/.vite/
+frontend/node_modules/.vite/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+tmp/
+temp/
+.cache/

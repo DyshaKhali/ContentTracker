@@ -1,0 +1,24 @@
+name: content-tracker
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: content-tracker-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: content_tracker
+      POSTGRES_PASSWORD: content_tracker
+      POSTGRES_DB: content_tracker
+    ports:
+      - "55432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U content_tracker -d content_tracker"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:
+    name: content-tracker-postgres-data
