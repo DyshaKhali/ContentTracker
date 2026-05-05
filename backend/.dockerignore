@@ -1,0 +1,10 @@
+﻿.env
+*.log
+server.out.log
+server.err.log
+content-tracker
+content-tracker.exe
+server
+server.exe
+*.test
+*.out

@@ -1,6 +1,6 @@
-﻿# Content Tracker
+# Content Tracker
 
-Content Tracker - локальное веб-приложение для учета фильмов, сериалов и аниме. Приложение помогает вести список того, что уже просмотрено, что находится в процессе просмотра и что хочется посмотреть позже.
+Content Tracker - веб-приложение для учета фильмов, сериалов и аниме. Оно помогает вести список просмотренного, отмечать прогресс по сезонам и сериям, ставить оценки и сохранять то, что хочется посмотреть позже.
 
 ## Возможности
 
@@ -20,6 +20,7 @@ Frontend:
 - React
 - Material UI
 - Vite
+- Nginx в Docker-контейнере
 
 Backend:
 - Go
@@ -28,7 +29,7 @@ Backend:
 
 Database:
 - PostgreSQL
-- Docker Compose для локального запуска базы
+- Docker Compose
 
 ## Структура проекта
 
@@ -49,117 +50,70 @@ ContentTracker/
       hooks/                 # состояние и сценарии страницы
       model/                 # статусы, категории, дефолтные формы
       utils/                 # расчет прогресса и маппинг payload
-  docker-compose.yml         # PostgreSQL для локальной разработки
+  data/postgres/             # локальные данные PostgreSQL, не коммитятся
+  docker-compose.yml
+  .env.example
   README.md
   .gitignore
 ```
 
 ## Требования
 
-Перед запуском установи:
+Для запуска нужен Docker Desktop.
 
-- Docker Desktop
-- Go
-- Node.js и npm
+## Настройка окружения
 
-Проверь, что команды доступны:
-
-```powershell
-docker --version
-go version
-node --version
-npm.cmd --version
-```
-
-## Быстрый запуск
-
-Открой терминал в папке проекта:
+Создай локальный `.env` в корне проекта на основе `.env.example`:
 
 ```powershell
 cd C:\dev\ContentTracker
+copy .env.example .env
 ```
 
-Запусти PostgreSQL:
+В `.env` хранятся локальные настройки PostgreSQL, включая пароль пользователя базы. Этот файл добавлен в `.gitignore` и не должен попадать в Git.
+
+## Запуск одной командой
 
 ```powershell
-docker compose up -d postgres
+cd C:\dev\ContentTracker
+docker compose up --build
 ```
 
-База будет доступна на `127.0.0.1:55432`. Внутри контейнера PostgreSQL работает на стандартном порту `5432`. Внешний порт `55432` выбран специально, чтобы не конфликтовать с уже установленным PostgreSQL на машине.
+После запуска:
 
-Запусти backend:
+- Frontend: http://127.0.0.1:5173
+- Backend healthcheck: http://127.0.0.1:8080/api/health
+- PostgreSQL: 127.0.0.1:55432
 
-```powershell
-cd C:\dev\ContentTracker\backend
-go run ./cmd/server
-```
-
-Backend будет доступен на:
+Данные PostgreSQL сохраняются локально в папке:
 
 ```text
-http://127.0.0.1:8080
+data/postgres/
 ```
 
-Проверка API:
-
-```text
-http://127.0.0.1:8080/api/health
-```
-
-В новом терминале запусти frontend:
-
-```powershell
-cd C:\dev\ContentTracker\frontend
-npm.cmd install
-npm.cmd run dev
-```
-
-Frontend будет доступен на:
-
-```text
-http://127.0.0.1:5173
-```
+Эта папка примонтирована в контейнер PostgreSQL и добавлена в `.gitignore`, поэтому база сохраняется между перезапусками, но не коммитится в репозиторий.
 
 ## Остановка проекта
 
-Остановить frontend/backend процессы:
+Остановить контейнеры:
 
 ```powershell
-Get-Process node, go, server -ErrorAction SilentlyContinue | Stop-Process -Force
-```
-
-Остановить PostgreSQL контейнер:
-
-```powershell
-cd C:\dev\ContentTracker
 docker compose down
 ```
 
-Не используй `docker compose down -v`, если не хочешь удалить данные PostgreSQL.
+Не используй `docker compose down -v`, если не хочешь удалить данные базы.
 
-## Переменные окружения backend
+## Где лежат настройки PostgreSQL
 
-Backend использует значения по умолчанию, поэтому `.env` не обязателен для локального запуска.
-
-Пример находится в:
+Локальные значения лежат в файле `.env` в корне проекта:
 
 ```text
-backend/.env.example
+POSTGRES_USER=...
+POSTGRES_PASSWORD=...
+POSTGRES_DB=...
 ```
 
-Доступные переменные:
-
-- `DATABASE_URL` - строка подключения PostgreSQL
-- `HTTP_ADDR` - адрес backend-сервера, по умолчанию `:8080`
-- `FRONTEND_ORIGINS` - список разрешенных frontend origin для CORS через запятую
-
-Значения по умолчанию:
-
-```text
-DATABASE_URL=postgres://content_tracker:content_tracker@127.0.0.1:55432/content_tracker?sslmode=disable
-HTTP_ADDR=:8080
-FRONTEND_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
-```
+В Git должен попадать только `.env.example`, где пароль указан как пример, а не реальный секрет.
 
 ## API
 
@@ -191,43 +145,3 @@ GET /api/items?category=anime&status=planned&q=naruto
 - `planned`
 - `watching`
 - `completed`
-
-## Проверка перед коммитом
-
-Backend:
-
-```powershell
-cd C:\dev\ContentTracker\backend
-go test ./...
-```
-
-Frontend:
-
-```powershell
-cd C:\dev\ContentTracker\frontend
-npm.cmd run build
-```
-
-## Подготовка к публикации на Git
-
-Перед первым коммитом проверь статус:
-
-```powershell
-cd C:\dev\ContentTracker
-git status
-```
-
-Файлы и папки вроде `node_modules`, `dist`, `.env`, логов и временных backend-бинарников уже добавлены в `.gitignore` и не должны попадать в репозиторий.
-
-Если `node_modules` или `dist` уже были добавлены в индекс Git раньше, убери их из индекса без удаления с диска:
-
-```powershell
-git rm -r --cached frontend/node_modules frontend/dist
-```
-
-Затем можно сделать первый коммит:
-
-```powershell
-git add .
-git commit -m "Initial Content Tracker project"
-```

@@ -7,7 +7,7 @@ build/
 dist/
 frontend/dist/
 
-# Environment files
+# Environment files with local secrets
 .env
 .env.*
 !.env.example
@@ -17,6 +17,11 @@ frontend/.env.local
 frontend/.env.development.local
 frontend/.env.test.local
 frontend/.env.production.local
+
+# Local persistent data
+/data/
+postgres-data/
+content-tracker-postgres-data/
 
 # Logs
 *.log

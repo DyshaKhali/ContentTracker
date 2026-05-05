@@ -1,4 +1,4 @@
-name: content-tracker
+﻿name: content-tracker
 
 services:
   postgres:
@@ -6,19 +6,42 @@ services:
     container_name: content-tracker-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: content_tracker
-      POSTGRES_PASSWORD: content_tracker
-      POSTGRES_DB: content_tracker
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB is required}
     ports:
       - "55432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./data/postgres:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U content_tracker -d content_tracker"]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
       timeout: 5s
       retries: 10
 
-volumes:
-  postgres_data:
-    name: content-tracker-postgres-data
+  backend:
+    build:
+      context: ./backend
+    container_name: content-tracker-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+      HTTP_ADDR: :8080
+      FRONTEND_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://127.0.0.1:8080/api
+    container_name: content-tracker-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend

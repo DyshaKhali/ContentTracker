@@ -13,7 +13,7 @@ type Config struct {
 
 func Load() Config {
 	return Config{
-		DatabaseURL:     getEnv("DATABASE_URL", "postgres://content_tracker:content_tracker@127.0.0.1:55432/content_tracker?sslmode=disable"),
+		DatabaseURL:     getEnv("DATABASE_URL", ""),
 		HTTPAddr:        getEnv("HTTP_ADDR", ":8080"),
 		FrontendOrigins: getCSVEnv("FRONTEND_ORIGINS", getEnv("FRONTEND_ORIGIN", "http://localhost:5173,http://127.0.0.1:5173")),
 	}
