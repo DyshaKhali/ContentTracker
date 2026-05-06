@@ -20,7 +20,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import StarIcon from '@mui/icons-material/Star';
-import { getStatus, statuses } from '../model/contentOptions.jsx';
+import { getStatus, hasSeasons, statuses } from '../model/contentOptions.jsx';
 
 export function ContentDetailsDrawer({
   item,
@@ -33,6 +33,7 @@ export function ContentDetailsDrawer({
   onSeasonChange,
 }) {
   const status = item ? getStatus(item.status) : null;
+  const StatusIcon = status?.icon;
 
   return (
     <Drawer anchor="right" open={Boolean(item)} onClose={onClose}>
@@ -84,17 +85,17 @@ export function ContentDetailsDrawer({
 
           <Divider />
 
-          {item.category === 'movie' ? (
+          {!hasSeasons(item.category) ? (
             <Stack spacing={1.5}>
               <Typography color="text.secondary">
-                Для фильма достаточно статуса и оценки.
+                Для этой категории достаточно статуса, оценки и заметок.
               </Typography>
               <Button
                 variant="outlined"
                 startIcon={<CheckCircleIcon />}
                 onClick={() => onChange({ status: 'completed' })}
               >
-                Отметить просмотренным
+                Отметить завершенным
               </Button>
             </Stack>
           ) : (
@@ -151,7 +152,7 @@ export function ContentDetailsDrawer({
               </Button>
             </Stack>
           </Box>
-          {status && <Chip className="drawer-status" label={status.label} color={status.color} />}
+          {status && StatusIcon && <Chip className="drawer-status" icon={<StatusIcon />} label={status.label} color={status.color} />}
         </Box>
       )}
     </Drawer>

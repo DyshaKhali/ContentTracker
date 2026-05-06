@@ -8,6 +8,9 @@ const (
 	CategoryAnime  Category = "anime"
 	CategoryMovie  Category = "movie"
 	CategorySeries Category = "series"
+	CategoryBook   Category = "book"
+	CategoryGame   Category = "game"
+	CategoryOther  Category = "other"
 )
 
 type Status string

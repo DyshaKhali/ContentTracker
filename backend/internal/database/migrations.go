@@ -13,7 +13,7 @@ func Migrate(ctx context.Context, db *pgxpool.Pool) error {
 		create table if not exists content_items (
 			id uuid primary key default gen_random_uuid(),
 			title text not null,
-			category text not null check (category in ('anime', 'movie', 'series')),
+			category text not null check (category in ('anime', 'movie', 'series', 'book', 'game', 'other')),
 			status text not null check (status in ('planned', 'watching', 'completed')) default 'planned',
 			rating integer check (rating between 1 and 10),
 			notes text not null default '',
@@ -30,6 +30,10 @@ func Migrate(ctx context.Context, db *pgxpool.Pool) error {
 			unique (content_id, season_number),
 			check (watched_episodes <= episode_count or episode_count = 0)
 		);
+
+		alter table content_items drop constraint if exists content_items_category_check;
+		alter table content_items add constraint content_items_category_check
+			check (category in ('anime', 'movie', 'series', 'book', 'game', 'other'));
 
 		create index if not exists idx_content_items_category on content_items(category);
 		create index if not exists idx_content_items_status on content_items(status);

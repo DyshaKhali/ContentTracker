@@ -7,7 +7,7 @@ func ValidateInput(input UpsertItemInput) error {
 		return validationError("title is required")
 	}
 	if !input.Category.Valid() {
-		return validationError("category must be anime, movie, or series")
+		return validationError("category must be anime, movie, series, book, game, or other")
 	}
 	if !input.Status.Valid() {
 		return validationError("status must be planned, watching, or completed")
@@ -15,10 +15,10 @@ func ValidateInput(input UpsertItemInput) error {
 	if input.Rating != nil && (*input.Rating < 1 || *input.Rating > 10) {
 		return validationError("rating must be between 1 and 10")
 	}
-	if input.Category == CategoryMovie && len(input.Seasons) > 0 {
-		return validationError("movies cannot have seasons")
+	if !input.Category.HasSeasons() && len(input.Seasons) > 0 {
+		return validationError("this category cannot have seasons")
 	}
-	if input.Category != CategoryMovie && len(input.Seasons) == 0 {
+	if input.Category.HasSeasons() && len(input.Seasons) == 0 {
 		return validationError("anime and series need at least one season")
 	}
 
@@ -44,7 +44,11 @@ func ValidateInput(input UpsertItemInput) error {
 }
 
 func (c Category) Valid() bool {
-	return c == CategoryAnime || c == CategoryMovie || c == CategorySeries
+	return c == CategoryAnime || c == CategoryMovie || c == CategorySeries || c == CategoryBook || c == CategoryGame || c == CategoryOther
+}
+
+func (c Category) HasSeasons() bool {
+	return c == CategoryAnime || c == CategorySeries
 }
 
 func (s Status) Valid() bool {

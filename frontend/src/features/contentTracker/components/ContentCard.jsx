@@ -9,11 +9,12 @@ import {
   Typography,
 } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
-import { getStatus } from '../model/contentOptions.jsx';
+import { getStatus, hasSeasons } from '../model/contentOptions.jsx';
 import { getProgress, getProgressLabel } from '../utils/contentProgress.js';
 
 export function ContentCard({ item, onClick }) {
   const status = getStatus(item.status);
+  const StatusIcon = status.icon;
 
   return (
     <Card className="content-card">
@@ -23,7 +24,7 @@ export function ContentCard({ item, onClick }) {
             <Box className={`poster-token poster-${item.category}`}>
               {item.title.slice(0, 2).toUpperCase()}
             </Box>
-            <Chip size="small" label={status.label} color={status.color} />
+            <Chip size="small" icon={<StatusIcon />} label={status.label} color={status.color} />
           </Stack>
           <Typography variant="h6" className="card-title">{item.title}</Typography>
           <Stack direction="row" spacing={1} className="card-meta">
@@ -32,7 +33,7 @@ export function ContentCard({ item, onClick }) {
             ) : (
               <Chip size="small" label="Без оценки" />
             )}
-            {item.category !== 'movie' && (
+            {hasSeasons(item.category) && (
               <Chip size="small" label={`${item.totalSeasons} сез.`} />
             )}
           </Stack>

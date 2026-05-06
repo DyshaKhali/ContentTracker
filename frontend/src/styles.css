@@ -112,6 +112,17 @@ body {
 .poster-series {
   background: linear-gradient(150deg, #2f4858, #6f7d8c);
 }
+.poster-book {
+  background: linear-gradient(150deg, #3d405b, #81b29a);
+}
+
+.poster-game {
+  background: linear-gradient(150deg, #5c2a9d, #f18f01);
+}
+
+.poster-other {
+  background: linear-gradient(150deg, #2a9d8f, #264653);
+}
 
 .card-title {
   margin-top: 18px;

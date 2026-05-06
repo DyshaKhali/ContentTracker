@@ -56,7 +56,7 @@ func normalizeInput(input UpsertItemInput) UpsertItemInput {
 	if input.Status == "" {
 		input.Status = StatusPlanned
 	}
-	if input.Category == CategoryMovie {
+	if !input.Category.HasSeasons() {
 		input.Seasons = nil
 	}
 	return input

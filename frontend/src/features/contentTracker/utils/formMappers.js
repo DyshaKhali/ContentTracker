@@ -1,12 +1,14 @@
+import { hasSeasons } from '../model/contentOptions.jsx';
+
 export function buildCreatePayload(form) {
   const seasonCount = Math.max(1, Number(form.seasonCount) || 1);
-  const seasons = form.category === 'movie'
-    ? []
-    : Array.from({ length: seasonCount }, (_, index) => ({
+  const seasons = hasSeasons(form.category)
+    ? Array.from({ length: seasonCount }, (_, index) => ({
       seasonNumber: index + 1,
       episodeCount: 0,
       watchedEpisodes: 0,
-    }));
+    }))
+    : [];
 
   return {
     title: form.title,
@@ -25,6 +27,6 @@ export function buildUpdatePayload(item) {
     status: item.status,
     rating: item.rating,
     notes: item.notes,
-    seasons: item.category === 'movie' ? [] : item.seasons,
+    seasons: hasSeasons(item.category) ? item.seasons : [],
   };
 }

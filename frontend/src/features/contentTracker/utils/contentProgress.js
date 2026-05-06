@@ -1,4 +1,4 @@
-import { getStatus } from '../model/contentOptions.jsx';
+import { getStatus, hasSeasons } from '../model/contentOptions.jsx';
 
 export function getProgress(item) {
   if (item.totalEpisodes > 0) {
@@ -8,10 +8,10 @@ export function getProgress(item) {
 }
 
 export function getProgressLabel(item) {
-  if (item.category === 'movie') {
+  if (!hasSeasons(item.category) || item.totalEpisodes === 0) {
     return getStatus(item.status).label;
   }
-  return `${item.watchedEpisodes}/${item.totalEpisodes || '?'} серий`;
+  return `${item.watchedEpisodes}/${item.totalEpisodes} серий`;
 }
 
 export function calculateStats(items) {

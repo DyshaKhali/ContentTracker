@@ -11,7 +11,7 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import { categories, statuses } from '../model/contentOptions.jsx';
+import { categories, hasSeasons, statuses } from '../model/contentOptions.jsx';
 
 export function AddContentDialog({
   form,
@@ -61,7 +61,7 @@ export function AddContentDialog({
               </Select>
             </FormControl>
           </Stack>
-          {form.category !== 'movie' && (
+          {hasSeasons(form.category) && (
             <TextField
               label="Количество сезонов"
               type="number"
